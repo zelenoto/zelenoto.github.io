@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1">
+		<title>Encrypt/Decrypt</title>
+		
+		<link rel="stylesheet" href="style.css">				
+		
+		<script src="jquery-3.2.1.min.js"></script>
+		<script src="aes.js"></script>
+		
+		<script>		  
+			
+			$( document ).ready(function() {  
+				
+				$('#encrypt').click(function() {
+				  var text = $('#plain-text').val().trim();
+					var pass = $('#pass').val().trim();
+					
+					var encrypted =  CryptoJS.AES.encrypt(text, pass);
+					
+					$('#encrypted-text').val(encrypted);
+					
+					event.preventDefault();
+				});
+				
+				$('#decrypt').click(function() {
+				  var encrypted = $('#encrypted-text').val().trim();
+					var pass = $('#pass').val().trim();
+					
+					try {
+						var decrypted =  CryptoJS.AES.decrypt(encrypted, pass);
+						var text = decrypted.toString(CryptoJS.enc.Utf8);
+						
+						$('#plain-text').val(text);
+					} catch (err) {
+					  alert("Wrong pass-phrase!");
+					}
+					
+					event.preventDefault();
+				});
+				
+				$('#copy-encrypted').click(function() {
+				  $('#encrypted-text').select();
+					
+					event.preventDefault();
+					document.execCommand("Copy");
+				});
+				
+				$('#copy-decrypted').click(function() {
+				  $('#plain-text').select();
+					
+					event.preventDefault();
+					document.execCommand("Copy");
+				});
+	
+			});		
+		
+		</script>
+	</head>
+	
+	<body>
+						
+		<form class="encrypt-form">
+		  <table>
+			
+			  <tr>
+				  <th>Plain Text</th>
+					<th>Passphrase</th>
+					<th>Encrypted Text</th>
+				</tr>
+				
+			  <tr>
+				  <td>				
+						<textarea rows="30" cols="70" name="plain-text" id="plain-text"></textarea>
+						<p>
+						<a href="#" id="copy-decrypted">Copy to clipboard</a>
+				  </td>
+					
+					<td>
+					  <input type="button" value="Decrypt" id="decrypt" />					
+				    <input type="password" name="pass" id="pass" />
+						<input type="button" value="Encrypt" id="encrypt" />
+				  </td>
+					
+				  <td>				    
+				    <textarea rows="30" cols="70" name="encrypted-text" id="encrypted-text"></textarea>
+						<p>
+						<a href="#" id="copy-encrypted">Copy to clipboard</a>
+					</td>
+				</tr>				
+				
+			</table> 
+    </form>			
+		
+	</body>
+
+</html>
